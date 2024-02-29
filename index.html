@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperatura</title>
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+    font-family: 'Open Sans', sans-serif;
+}
+
+
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    background-image: url("https://source.unsplash.com/1600x900/?landscape");
+}
+
+.caixa-principal {
+    background-color: black;
+    width: 95%;
+    max-width: 430px;
+    opacity: 0.8;
+    padding: 20px;
+    border-radius: 25px;
+}
+
+input {
+    border: none;
+    outline: none;
+    padding: 10px;
+    border-radius: 24px;
+    font-size: 20px;
+    background-color: #7c7c7c2b;
+    width: calc( 100% - 100px);
+    color:  white;
+}
+
+button {
+    float: right;
+    border-radius: 40px;
+    background-color: #7c7c7c2b;
+
+}
+
+button:hover {
+    cursor: pointer;
+    background-color: #7c7c7c6b
+}
+
+.caixa-conteudo {
+    margin-top: 20px;
+}
+
+.lupa {
+    height: 40px;
+    border: none;
+    border-radius: 25px;
+    padding: 10px;
+    outline: none;
+    background-color: #7c7c7c2b;
+    float: right;
+
+}
+
+h2 {
+    color: white;
+    font-size: 28px;
+}
+
+.temp {
+    color: white;
+    margin-top: 20px;
+}
+
+.caixaMenor {
+    display: flex;
+    margin-top: 20px;
+    align-items: center;
+}
+
+.descricao {
+    color: white;
+    text-transform: capitalize;
+    margin-left: 20px;
+}
+
+.umidade {
+    color: white;
+    margin-top: 20px;
+}
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Open+Sans:ital,wght@1,300&display=swap"
+        rel="stylesheet">
+
+<script>
+        let chave = "2429ab01a619db044787c3e367fe5e62"
+function colocaNaTela(dados){
+    console.log(dados)
+    document.querySelector(".cidade").innerHTML = "Tempo em " + dados.name
+    /* document.querySelector(".temp").innerHTML =  Math.floor(dados.main.temp) + "°C" */
+    document.querySelector(".temp").innerHTML = Math.floor(dados.main.temp)+ "ºC"
+    document.querySelector(".descricao").innerHTML = dados.weather[0].description
+    document.querySelector(".umidade").innerHTML =  "Umidade relativa do ar "+dados.main.humidity+ "%"
+    document.querySelector(".iconeNuv").src = "https://openweathermap.org/img/wn/"+dados.weather[0].icon+".png"
+
+
+}             
+
+async function buscarCidade(cidade){
+    let dados = await fetch("https://api.openweathermap.org/data/2.5/weather?q=" + 
+    cidade + 
+    "&appid=" + 
+    chave +
+    "&lang=pt_br" +
+    "&units=metric").then( resposta => resposta.json())
+          
+    
+    colocaNaTela(dados)        
+}
+
+
+function cliqueiNoBotao(){
+    let cidade = document.querySelector(".input-cidade").value
+        
+    buscarCidade(cidade)
+
+}
+    </script>
+</head>
+
+<body>
+    <div class="caixa-principal">
+        <input class="input-cidade" type="text" placeholder="Digite o nome da cidade">
+        <button onclick="cliqueiNoBotao()">
+            <img class="lupa"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Magnifying_glass_icon.svg/490px-Magnifying_glass_icon.svg.png"
+                alt="imagem do botão">
+            <!-- https://cdn.icon-icons.com/icons2/1111/PNG/512/loupe_79257.png"-->
+        </button>
+        <div class="caixa-conteudo">
+            <h2 class="cidade">Tempo onde você quer saber</h2>
+            <p class="temp">0 C</p>
+            <div class="caixaMenor">
+                <img class="iconeNuv" src="https://openweathermap.org/img/wn/04n.png" alt="Imagem da nuvem" srcset="">
+                <p class="descricao">Nuvens dispersas</p>
+            </div>
+            <p class="umidade">Umidade: 98%</p>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
